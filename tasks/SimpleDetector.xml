@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Task>
+	<!-- List of components -->
+	<Components>
+		<Source type="CameraOpenCV" thread="Thread1" group="s1">
+		</Source>
+
+		<Col type="CvColorConv" thread="Thread1" group="s1">
+			<type>BGR2GRAY</type>	
+		</Col>
+		
+		<Proc type="CvThreshold" thread="Thread1" group="s1">
+			<type>BINARY</type>
+			<maxval>192</maxval>
+		</Proc>
+
+		<Detector type="BlobExtractor" thread="Thread1" group="s1">
+			<min_size>5000</min_size>
+		</Detector>
+		
+		<Window type="CvWindow" thread="Thread1" group="s1">
+			<title>Preview</title>
+			<count>2</count>
+		</Window>
+	</Components>
+
+	<!-- Threads of execution -->
+	<Executors>
+		<Thread1 type="continuous">
+			<main_component>Source</main_component>
+		</Thread1>
+	</Executors>
+
+	<!-- Event connections -->
+	<Events>
+		<Event source="Source.newImage" destination="Col.onNewImage"/>
+		<Event source="Col.newImage" destination="Proc.onNewImage"/>
+		<Event source="Proc.newImage" destination="Detector.onNewImage"/>
+		<Event source="Detector.newBlobs" destination="Window.onNewImage0"/>
+		<Event source="Detector.newBlobs" destination="Window.onNewImage1"/>
+	</Events>
+
+	<!-- Data stream assignments -->
+	<DataStreams>
+		<Source>
+			<out_img type="out" group="Con"/>
+		</Source>
+
+		<Col>
+			<in_img type="in" group="Con"/>
+			<out_img type="out" group="Gray"/>	
+		</Col>
+			
+		<Proc>
+			<in_img type="in" group="Gray"/>
+			<out_img type="out" group="Con2"/>
+		</Proc>
+		
+		<Detector>
+			<in_img type="in" group="Con2"/>
+			<out_blobs type="out" group="blobs"/>
+		</Detector>
+
+		<Window>
+			<in_img0 type="in" group="Con2"/>
+			<in_img1 type="in" group="Con"/>
+			<in_draw1 type="in" group="blobs"/>
+		</Window>
+	</DataStreams>
+
+</Task>
