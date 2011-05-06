@@ -13,6 +13,7 @@
 #include "Component.hpp"
 #include "Panel_Empty.hpp"
 #include "DataStream.hpp"
+#include "Property.hpp"
 
 #include <cv.h>
 
@@ -116,6 +117,7 @@ protected:
 
 private:
 	cv::Mat img_uchar;
+	Base::Property<int> min_size;
 
 };
 
