@@ -6,7 +6,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 FILE(GLOB lib_src *.cpp)
 ADD_LIBRARY(CvBlobsTypes SHARED ${lib_src})
 # Link with other libraries
-TARGET_LINK_LIBRARIES(CvBlobsTypes ${OpenCV_LIBRARIES})
+TARGET_LINK_LIBRARIES(CvBlobsTypes ${OpenCV_LIBS})
 
 # Install library
 INSTALL(
