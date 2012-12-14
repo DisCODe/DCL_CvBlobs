@@ -11,7 +11,7 @@
 #include "ComponentLabeling.hpp"
 
 #include "Logger.hpp"
-#include "Timer.hpp"
+#include "Common/Timer.hpp"
 #include "Types/BlobOperators.hpp"
 
 #include <boost/thread.hpp>
@@ -21,31 +21,35 @@ namespace Processors {
 namespace BlobExtractor {
 
 BlobExtractor_Processor::BlobExtractor_Processor(const std::string & name) : Base::Component(name),
-	min_size("min_size", 10000, "range")
+	min_size("min_size", 10000, "range"),
+	background_color("background_color", 0, "range")
 {
 	LOG(LTRACE)<<"Hello BlobExtractor_Processor\n";
 	min_size.addConstraint("0");
 	min_size.addConstraint("1000000");
 	registerProperty(min_size);
+
+	background_color.addConstraint("0");
+	background_color.addConstraint("255");
+	registerProperty(background_color);
 }
 
 BlobExtractor_Processor::~BlobExtractor_Processor() {
 	LOG(LTRACE)<<"Good bye BlobExtractor_Processor\n";
 }
 
-bool BlobExtractor_Processor::onInit() {
-	LOG(LTRACE) << "BlobExtractor_Processor::initialize\n";
-
-	newBlobs = registerEvent("newBlobs");
-
-	newImage = registerEvent("newImage");
-
+void BlobExtractor_Processor::prepareInterface() {
 	h_onNewImage.setup(this, &BlobExtractor_Processor::onNewImage);
 	registerHandler("onNewImage", &h_onNewImage);
+	addDependency("onNewImage", &in_img);
 
 	registerStream("in_img", &in_img);
 	registerStream("out_img", &out_img);
 	registerStream("out_blobs", &out_blobs);
+}
+
+bool BlobExtractor_Processor::onInit() {
+	LOG(LTRACE) << "BlobExtractor_Processor::initialize\n";
 
 	return true;
 }
@@ -89,7 +93,7 @@ void BlobExtractor_Processor::onNewImage() {
 
 	try
 	{
-		success = ComponentLabeling( &ipl_img, NULL, props.bkg_color, res );
+		success = ComponentLabeling( &ipl_img, NULL, background_color, res );
 	}
 	catch(...)
 	{

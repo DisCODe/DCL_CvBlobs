@@ -15,27 +15,12 @@
 #include "DataStream.hpp"
 #include "Property.hpp"
 
-#include <cv.h>
+#include <opencv2/core/core.hpp>
 
 #include "Types/BlobResult.hpp"
 
 namespace Processors {
 namespace BlobExtractor {
-
-struct Props : public Base::Props {
-
-	int min_size;
-	int bkg_color;
-
-	void load(const ptree & pt) {
-		min_size = pt.get("min_size", 100);
-		bkg_color = pt.get("bkg_color", 0);
-	}
-
-	void save(ptree & pt) {
-
-	}
-};
 
 /*!
  * \class BlobExtractor_Processor
@@ -56,12 +41,9 @@ public:
 	virtual ~BlobExtractor_Processor();
 
 	/*!
-	 * Return properties
+	 * Prepare data streams and handlers
 	 */
-	Base::Props * getProperties()
-	{
-		return &props;
-	}
+	void prepareInterface();
 
 protected:
 
@@ -113,11 +95,10 @@ protected:
 	/// Output data stream - list of detected blobs
 	Base::DataStreamOut<Types::Blobs::BlobResult> out_blobs;
 
-	Props props;
-
 private:
 	cv::Mat img_uchar;
 	Base::Property<int> min_size;
+	Base::Property<int> background_color;
 
 };
 
