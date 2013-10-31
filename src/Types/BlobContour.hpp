@@ -10,7 +10,7 @@
 
 #include <list>
 
-#include <cv.h>
+#include <opencv2/opencv.hpp>
 
 namespace Types {
 namespace Blobs {

@@ -7,7 +7,6 @@
 
 #include "Types/BlobContour.hpp"
 
-#include <cxcore.h>
 
 namespace Types {
 namespace Blobs {

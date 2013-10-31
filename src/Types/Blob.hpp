@@ -8,7 +8,7 @@
 #ifndef CBLOB_H_
 #define CBLOB_H_
 
-#include <cxcore.h>
+#include <opencv2/opencv.hpp>
 
 #include "Types/BlobContour.hpp"
 #include "Types/Drawable.hpp"
@@ -130,8 +130,7 @@ public:
 	 * \param offsetY
 	 * \post modifies input image and returns the seed point used to fill the blob ??
 	 */
-	void draw( cv::Mat & image, CvScalar color, int offsetX = 0, int offsetY = 0 );
-
+	void draw( cv::Mat & image, cv::Scalar color, int offsetX = 0, int offsetY = 0 );
 	/*!
 	 * \brief Adds external contour to current external contour
 	 * \param blob blob from which extract the added external contour

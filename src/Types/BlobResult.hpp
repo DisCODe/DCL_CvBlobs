@@ -7,8 +7,9 @@
 #define BLOBRESULT_HPP_
 
 #include <math.h>
-#include <cxcore.h>
 #include <vector>		// vectors de la STL
+
+#include <opencv2/opencv.hpp>
 
 //! Vector of doubles
 typedef std::vector<double> double_stl_vector;
@@ -112,7 +113,7 @@ public:
 	//! Prints some features of all the blobs in a file
 	void PrintBlobs( char *nom_fitxer ) const;
 
-	void draw(cv::Mat & image, CvScalar color, int offsetx = 0, int offsety = 0);
+	void draw(cv::Mat & image, cv::Scalar color, int offsetx = 0, int offsety = 0);
 
 
 	virtual Drawable * clone() {

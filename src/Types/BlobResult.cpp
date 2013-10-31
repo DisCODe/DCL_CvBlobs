@@ -786,7 +786,7 @@ void BlobResult::PrintBlobs( char *nom_fitxer ) const
 /*!
  * Draw all blobs onto given image.
  */
-void BlobResult::draw(cv::Mat & image, CvScalar color, int offsetx, int offsety) {
+void BlobResult::draw(cv::Mat & image, cv::Scalar color, int offsetx, int offsety) {
 	for(int i=0; i<GetNumBlobs(); i++)
 	{
 		m_blobs[i]->draw(image, color, offsetx, offsety);

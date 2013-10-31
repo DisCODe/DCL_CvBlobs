@@ -484,7 +484,7 @@ CvBox2D Blob::GetEllipse()
 
 }
 
-void Blob::draw(cv::Mat & image, CvScalar color, int offsetX /*=0*/, int offsetY /*=0*/)
+void Blob::draw(cv::Mat & image, cv::Scalar color, int offsetX /*=0*/, int offsetY /*=0*/)
 {
 	IplImage ipl_img = IplImage(image);
 	cvDrawContours(&ipl_img, m_externalContour.GetContourPoints(), color, color, 0, CV_FILLED, 8);
