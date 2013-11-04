@@ -84,13 +84,13 @@ protected:
 	Base::DataStreamIn<cv::Mat> in_img;
 
 	/// Event raised, when new image with blobs is ready
-	Base::Event * newImage;
+    //Base::Event * newImage;
 
 	/// Output data stream - image with drawn blobs
 	Base::DataStreamOut<cv::Mat> out_img;
 
 	/// Event raised, when set of blobs is extracted
-	Base::Event * newBlobs;
+    //Base::Event * newBlobs;
 
 	/// Output data stream - list of detected blobs
 	Base::DataStreamOut<Types::Blobs::BlobResult> out_blobs;
@@ -109,7 +109,7 @@ private:
 /*
  * Register processor component.
  */
-REGISTER_PROCESSOR_COMPONENT("BlobExtractor", Processors::BlobExtractor::BlobExtractor_Processor, Common::Panel_Empty)
+REGISTER_COMPONENT("BlobExtractor", Processors::BlobExtractor::BlobExtractor_Processor)
 
 #endif /* BLOBEXTRACTOR_PROCESSOR_HPP_ */
 

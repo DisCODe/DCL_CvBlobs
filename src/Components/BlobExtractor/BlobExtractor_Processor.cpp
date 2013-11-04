@@ -112,7 +112,7 @@ void BlobExtractor_Processor::onNewImage() {
 
 			out_blobs.write(result);
 			LOG(LTRACE) << "blobs written";
-			newBlobs->raise();
+            //newBlobs->raise();
 			LOG(LTRACE) << "blobs sent";
 		//	result.draw(out, CV_RGB(255, 0, 0), 0, 0);
 		//	out_img.write(in);
