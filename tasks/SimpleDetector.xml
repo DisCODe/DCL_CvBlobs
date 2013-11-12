@@ -1,71 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
 <Task>
-	<!-- List of components -->
-	<Components>
-		<Source type="CameraOpenCV" thread="Thread1" group="s1">
-		</Source>
+    <!-- reference task information -->
+    <Reference>
+        <Author>
+        </Author>
 
-		<Col type="CvColorConv" thread="Thread1" group="s1">
-			<type>BGR2GRAY</type>	
-		</Col>
-		
-		<Proc type="CvThreshold" thread="Thread1" group="s1">
-			<type>BINARY</type>
-			<maxval>192</maxval>
-		</Proc>
+    <Description>
+        </Description>
+    </Reference>
 
-		<Detector type="BlobExtractor" thread="Thread1" group="s1">
-			<min_size>5000</min_size>
-		</Detector>
-		
-		<Window type="CvWindow" thread="Thread1" group="s1">
-			<title>Preview</title>
-			<count>2</count>
-		</Window>
-	</Components>
+    <Subtasks>
+        <Subtask name="Main">
+            <Executor name="Processing"  period="1">
+                <Component name="Source" type="CvBasic:CameraOpenCV" priority="1" bump="0">
+                </Component>
 
-	<!-- Threads of execution -->
-	<Executors>
-		<Thread1 type="continuous">
-			<main_component>Source</main_component>
-		</Thread1>
-	</Executors>
+                <Component name="Col" type="CvBasic:CvColorConv" priority="2" bump="0">
+                    <param name="type">BGR2GRAY</param>
+                </Component>
 
-	<!-- Event connections -->
-	<Events>
-		<Event source="Source.newImage" destination="Col.onNewImage"/>
-		<Event source="Col.newImage" destination="Proc.onNewImage"/>
-		<Event source="Proc.newImage" destination="Detector.onNewImage"/>
-		<Event source="Detector.newBlobs" destination="Window.onNewImage0"/>
-		<Event source="Detector.newBlobs" destination="Window.onNewImage1"/>
-	</Events>
+                <Component name="Proc" type="CvBasic:CvThreshold" priority="3" bump="0">
+                    <param name="type">BINARY</param>
+                    <param name="maxval">192</param>
+                </Component>
 
-	<!-- Data stream assignments -->
-	<DataStreams>
-		<Source>
-			<out_img type="out" group="Con"/>
-		</Source>
+                <Component name="Detector" type="CvBlobs:BlobExtractor" priority="4" bump="0">
+                    <param name="min_size">5000</param>
+                </Component>
+            </Executor>
 
-		<Col>
-			<in_img type="in" group="Con"/>
-			<out_img type="out" group="Gray"/>	
-		</Col>
-			
-		<Proc>
-			<in_img type="in" group="Gray"/>
-			<out_img type="out" group="Con2"/>
-		</Proc>
-		
-		<Detector>
-			<in_img type="in" group="Con2"/>
-			<out_blobs type="out" group="blobs"/>
-		</Detector>
+            <Executor name="Visualization" period="0.2">
+                <Component name="Window" type="CvBasic:CvWindow" priority="5" bump="0">
+                    <param name="count">2</param>
+                    <param name="title">Original, Result</param>
+                </Component>
+            </Executor>
+        </Subtask>
+    </Subtasks>
 
-		<Window>
-			<in_img0 type="in" group="Con2"/>
-			<in_img1 type="in" group="Con"/>
-			<in_draw1 type="in" group="blobs"/>
-		</Window>
-	</DataStreams>
-
+    <DataStreams>
+        <Source name="Source.out_img">
+            <sink>Col.in_img</sink>
+        </Source>
+        <Source name="Col.out_img">
+            <sink>Proc.in_img</sink>
+        </Source>
+        <Source name="Proc.out_img">
+            <sink>Detector.in_img</sink>
+        </Source>
+        <Source name="Detector.out_img">
+            <sink>Window.in_img</sink>
+        </Source>
+    </DataStreams>
 </Task>
