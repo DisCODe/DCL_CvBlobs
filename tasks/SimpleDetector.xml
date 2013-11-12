@@ -29,7 +29,7 @@
             </Executor>
 
             <Executor name="Visualization" period="0.2">
-                <Component name="Window" type="CvBasic:CvWindow" priority="5" bump="0">
+                <Component name="Window" type="CvBasic:CvWindow" priority="1" bump="0">
                     <param name="count">2</param>
                     <param name="title">Original, Result</param>
                 </Component>
@@ -40,6 +40,7 @@
     <DataStreams>
         <Source name="Source.out_img">
             <sink>Col.in_img</sink>
+            <sink>Window.in_img0</sink>
         </Source>
         <Source name="Col.out_img">
             <sink>Proc.in_img</sink>
@@ -48,7 +49,7 @@
             <sink>Detector.in_img</sink>
         </Source>
         <Source name="Detector.out_img">
-            <sink>Window.in_img</sink>
+            <sink>Window.in_img1</sink>
         </Source>
     </DataStreams>
 </Task>

@@ -58,11 +58,6 @@ protected:
 	bool onFinish();
 
 	/*!
-	 * Retrieves data from device.
-	 */
-	bool onStep();
-
-	/*!
 	 * Start component
 	 */
 	bool onStart();
@@ -83,14 +78,8 @@ protected:
 	/// Input data stream
 	Base::DataStreamIn<cv::Mat> in_img;
 
-	/// Event raised, when new image with blobs is ready
-    //Base::Event * newImage;
-
 	/// Output data stream - image with drawn blobs
 	Base::DataStreamOut<cv::Mat> out_img;
-
-	/// Event raised, when set of blobs is extracted
-    //Base::Event * newBlobs;
 
 	/// Output data stream - list of detected blobs
 	Base::DataStreamOut<Types::Blobs::BlobResult> out_blobs;

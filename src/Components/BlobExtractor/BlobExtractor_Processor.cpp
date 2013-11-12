@@ -46,6 +46,8 @@ void BlobExtractor_Processor::prepareInterface() {
 	registerStream("in_img", &in_img);
 	registerStream("out_img", &out_img);
 	registerStream("out_blobs", &out_blobs);
+
+	addDependency("onNewImage", &in_img);
 }
 
 bool BlobExtractor_Processor::onInit() {
@@ -57,12 +59,6 @@ bool BlobExtractor_Processor::onInit() {
 bool BlobExtractor_Processor::onFinish() {
 	LOG(LTRACE) << "BlobExtractor_Processor::finish\n";
 
-	return true;
-}
-
-bool BlobExtractor_Processor::onStep()
-{
-	LOG(LTRACE) << "BlobExtractor_Processor::step\n";
 	return true;
 }
 
@@ -85,8 +81,8 @@ void BlobExtractor_Processor::onNewImage() {
 	cv::Mat in = in_img.read();
 	in.convertTo(img_uchar, CV_8UC1);
 	IplImage ipl_img = IplImage(img_uchar);
-//  cv::Mat mat_img = img_uchar;
-//	cv::Mat out = cv::Mat::zeros(in.size(), CV_8UC3);
+	cv::Mat mat_img = img_uchar;
+ 	cv::Mat out = cv::Mat::zeros(in.size(), CV_8UC3);
 
 	Types::Blobs::Blob_vector res;
 	bool success;
@@ -101,7 +97,7 @@ void BlobExtractor_Processor::onNewImage() {
 		LOG(LWARNING) << "blob find error\n";
 	}
 
-		try {
+	try {
 		if( !success ) {
 			LOG(LERROR) << "Blob find error\n";
 		} else {
@@ -112,11 +108,11 @@ void BlobExtractor_Processor::onNewImage() {
 
 			out_blobs.write(result);
 			LOG(LTRACE) << "blobs written";
-            //newBlobs->raise();
+
 			LOG(LTRACE) << "blobs sent";
-		//	result.draw(out, CV_RGB(255, 0, 0), 0, 0);
-		//	out_img.write(in);
-		//	newImage->raise();
+			result.draw(out, CV_RGB(255, 0, 0), 0, 0);
+			out_img.write(in);
+
 		}
 
 		LOG(LINFO) << "Blobing took " << timer.elapsed() << " seconds\n";
