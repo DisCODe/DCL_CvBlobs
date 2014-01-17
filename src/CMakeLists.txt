@@ -18,7 +18,7 @@ FIND_PACKAGE( OpenCV REQUIRED )
 # Find another DCLs our one depends on
 # Use macro: DISCODE_FIND_DCL(<DCL_NAME>)
 DISCODE_FIND_DCL(CvBasic)
-DISCODE_FIND_DCL(CvBlobs)
+#DISCODE_FIND_DCL(CvBlobs)
 
 # ##############################################################################
 # Add source directories
