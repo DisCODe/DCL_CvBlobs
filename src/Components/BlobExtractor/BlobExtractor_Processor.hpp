@@ -85,7 +85,6 @@ protected:
 	Base::DataStreamOut<Types::Blobs::BlobResult> out_blobs;
 
 private:
-	cv::Mat img_uchar;
 	Base::Property<int> min_size;
 	Base::Property<int> background_color;
 

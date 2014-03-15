@@ -21,12 +21,12 @@ namespace Processors {
 namespace BlobExtractor {
 
 BlobExtractor_Processor::BlobExtractor_Processor(const std::string & name) : Base::Component(name),
-	min_size("min_size", 10000, "range"),
+    min_size("min_size", 100, "range"),
 	background_color("background_color", 0, "range")
 {
 	LOG(LTRACE)<<"Hello BlobExtractor_Processor\n";
 	min_size.addConstraint("0");
-	min_size.addConstraint("1000000");
+    min_size.addConstraint("310000");
 	registerProperty(min_size);
 
 	background_color.addConstraint("0");
@@ -73,16 +73,22 @@ bool BlobExtractor_Processor::onStart()
 }
 
 void BlobExtractor_Processor::onNewImage() {
-	LOG(LTRACE) << "BlobExtractor_Processor::onNewImage() called!\n";
+    CLOG(LTRACE) << "BlobExtractor_Processor::onNewImage() called!\n";
 
 	Common::Timer timer;
 	timer.restart();
 
-	cv::Mat in = in_img.read();
-	in.convertTo(img_uchar, CV_8UC1);
-	IplImage ipl_img = IplImage(img_uchar);
-	cv::Mat mat_img = img_uchar;
- 	cv::Mat out = cv::Mat::zeros(in.size(), CV_8UC3);
+    // Read image.
+    cv::Mat in = in_img.read();
+    cv::Mat out = cv::Mat::zeros(in.size(), CV_8UC3);
+    cvtColor(in, out, CV_GRAY2BGR);
+    //in.convertTo(out, CV_8UC3);
+
+    // Create a single channel matrix.
+    cv::Mat img_uchar = cv::Mat(in.size(), CV_8UC1);
+    in.convertTo(img_uchar, CV_8UC1);
+    IplImage ipl_img = IplImage(img_uchar);
+
 
 	Types::Blobs::Blob_vector res;
 	bool success;
@@ -90,37 +96,38 @@ void BlobExtractor_Processor::onNewImage() {
 	try
 	{
 		success = ComponentLabeling( &ipl_img, NULL, background_color, res );
+        CLOG(LTRACE) << "Component labeling result: " <<success;
 	}
 	catch(...)
 	{
 		success = false;
-		LOG(LWARNING) << "blob find error\n";
+        CLOG(LWARNING) << "blob find error\n";
 	}
 
 	try {
 		if( !success ) {
-			LOG(LERROR) << "Blob find error\n";
+            CLOG(LERROR) << "Blob find error\n";
 		} else {
-			LOG(LTRACE) << "blobs found";
-			Types::Blobs::BlobResult result(res);
+            Types::Blobs::BlobResult result(res);
+            CLOG(LTRACE) << "blobs found: " << result.GetNumBlobs();
 
-			result.Filter( result, B_EXCLUDE, Types::Blobs::BlobGetArea(), B_LESS, min_size );
+            result.Filter( result, B_EXCLUDE, Types::Blobs::BlobGetArea(), B_LESS, min_size );
+            CLOG(LTRACE) << "blobs after filtering: " << result.GetNumBlobs();
 
 			out_blobs.write(result);
-			LOG(LTRACE) << "blobs written";
+            CLOG(LTRACE) << "blobs written to ";
 
-			LOG(LTRACE) << "blobs sent";
-			result.draw(out, CV_RGB(255, 0, 0), 0, 0);
-			out_img.write(in);
+            result.draw(out, CV_RGB(242, 0, 86), 0, 0);
+            out_img.write(out);
 
 		}
 
-		LOG(LINFO) << "Blobing took " << timer.elapsed() << " seconds\n";
+        CLOG(LINFO) << "Blobing took " << timer.elapsed() << " seconds\n";
 	}
 	catch(...)
 	{
-		LOG(LERROR) << "BlobExtractor onNewImage failure";
-	}
+        CLOG(LERROR) << "BlobExtractor onNewImage failure";
+    }
 }
 
 }//: namespace BlobExtractor

@@ -11,20 +11,27 @@
     <Subtasks>
         <Subtask name="Main">
             <Executor name="Processing"  period="1">
-                <Component name="Source" type="CvBasic:CameraOpenCV" priority="1" bump="0">
+                <Component name="Source" type="CvBasic:Sequence" priority="1" bump="0">
+                        <param name="sequence.directory">/home/tkornuta/Vincze_segmenter/OSD-0.2/image_color/</param>
+                        <param name="sequence.pattern">.*</param>
+                        <param name="mode.loop">1</param>
+                        <param name="mode.iterate">0</param>
                 </Component>
+<!--
+                <Component name="Source" type="CvBasic:CameraOpenCV" priority="1" bump="0">
+                </Component>-->
 
-                <Component name="Col" type="CvBasic:CvColorConv" priority="2" bump="0">
+                <Component name="ColourConverter" type="CvBasic:CvColorConv" priority="2" bump="0">
                     <param name="type">BGR2GRAY</param>
                 </Component>
 
-                <Component name="Proc" type="CvBasic:CvThreshold" priority="3" bump="0">
+                <Component name="Threshold" type="CvBasic:CvThreshold" priority="3" bump="0">
                     <param name="type">BINARY</param>
                     <param name="maxval">192</param>
                 </Component>
 
-                <Component name="Detector" type="CvBlobs:BlobExtractor" priority="4" bump="0">
-                    <param name="min_size">5000</param>
+                <Component name="Detector" type="CvBlobs:BlobExtractor" priority="4" bump="3">
+                    <param name="min_size">100</param>
                 </Component>
             </Executor>
 
@@ -39,17 +46,20 @@
 
     <DataStreams>
         <Source name="Source.out_img">
-            <sink>Col.in_img</sink>
+            <sink>ColourConverter.in_img</sink>
             <sink>Window.in_img0</sink>
         </Source>
-        <Source name="Col.out_img">
-            <sink>Proc.in_img</sink>
+        <Source name="ColourConverter.out_img">
+            <sink>Threshold.in_img</sink>
         </Source>
-        <Source name="Proc.out_img">
+        <Source name="Threshold.out_img">
             <sink>Detector.in_img</sink>
         </Source>
         <Source name="Detector.out_img">
             <sink>Window.in_img1</sink>
+        </Source>
+        <Source name="Detector.out_blobs">
+            <sink>Window.in_draw0</sink>
         </Source>
     </DataStreams>
 </Task>

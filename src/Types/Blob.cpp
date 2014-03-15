@@ -333,7 +333,7 @@ double Blob::Mean(IplImage *image)
 	offset.y = -m_boundingBox.y;
 
 	// draw contours on mask
-	cvDrawContours(mask, m_externalContour.GetContourPoints(), CV_RGB(255,255,255), CV_RGB(255,255,255), 0, CV_FILLED, 8, offset);
+    cvDrawContours(mask, m_externalContour.GetContourPoints(), CV_RGB(255,255,255), CV_RGB(255,255,255), 0, CV_FILLED, 8, offset);
 
 	// draw internal contours
 	t_contourList::iterator it = m_internalContours.begin();
@@ -487,7 +487,7 @@ CvBox2D Blob::GetEllipse()
 void Blob::draw(cv::Mat & image, cv::Scalar color, int offsetX /*=0*/, int offsetY /*=0*/)
 {
 	IplImage ipl_img = IplImage(image);
-	cvDrawContours(&ipl_img, m_externalContour.GetContourPoints(), color, color, 0, CV_FILLED, 8);
+    cvDrawContours(&ipl_img, m_externalContour.GetContourPoints(), color, color, 0, 1, 8);
 }
 
 BlobContour::t_PointList Blob::GetConvexHull()
