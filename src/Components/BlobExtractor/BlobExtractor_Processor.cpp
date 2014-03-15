@@ -80,17 +80,25 @@ void BlobExtractor_Processor::onNewImage() {
 
     // Read image.
     cv::Mat in = in_img.read();
+
     cv::Mat out = cv::Mat::zeros(in.size(), CV_8UC3);
+    cv::Mat img_uchar = cv::Mat(in.size(), CV_8UC1);
+
     if (in.channels()==1)
+    {
         cvtColor(in, out, CV_GRAY2BGR);
+        in.copyTo(img_uchar);
+//        in.convertTo(img_uchar, CV_8UC1);
+    }
     else
+    {
         in.copyTo(out);
+        cvtColor(in, img_uchar, CV_BGR2GRAY);
+    }
 
     //in.convertTo(out, CV_8UC3);
 
-    // Create a single channel matrix.
-    cv::Mat img_uchar = cv::Mat(in.size(), CV_8UC1);
-    in.convertTo(img_uchar, CV_8UC1);
+    // Create a single channel ipl_image. :]
     IplImage ipl_img = IplImage(img_uchar);
 
 
