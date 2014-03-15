@@ -81,7 +81,11 @@ void BlobExtractor_Processor::onNewImage() {
     // Read image.
     cv::Mat in = in_img.read();
     cv::Mat out = cv::Mat::zeros(in.size(), CV_8UC3);
-    cvtColor(in, out, CV_GRAY2BGR);
+    if (in.channels()==1)
+        cvtColor(in, out, CV_GRAY2BGR);
+    else
+        in.copyTo(out);
+
     //in.convertTo(out, CV_8UC3);
 
     // Create a single channel matrix.
